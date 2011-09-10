@@ -1,3 +1,6 @@
 Wiki
 
 An experimental wiki written in node, on top of express.
+
+Objectives
+- A beautiful and easy to use wiki that unlocks compulsive behavior for those who previously were hampered by wiki-specific markup.

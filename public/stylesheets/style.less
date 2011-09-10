@@ -1,0 +1,109 @@
+/* Colors
+Springpad
+e8eef1 - bg light blue
+feffff - grad light top
+f1f3f3 - grad light bottom
+394f5a - dark blue
+fbf01d - light yellow
+f9b11c - dark yellow
+*/
+
+// Color vars
+@background: #e8eef1;
+@lightGradTop: #feffff;
+@lightGradBottom: #f1f3f3;
+@darkGradTop: #fbf01d; 
+@darkGradBottom: #f9b11c; 
+@a: #394f5a;
+@textColor: #394f5a;
+
+body {
+  background-color: @background;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+html, body { border-width: 0px; margin: 0px; width: 100%; height: 100%; }
+
+a {
+  color: @a;
+}
+
+.boldText{
+	font-size:12px;
+	font-weight:bold;
+}
+
+.lightGrad {
+	background: -webkit-gradient(linear, left top, left bottom, from(@lightGradTop), to(@lightGradBottom)); /* for webkit browsers */
+	background: -moz-linear-gradient(top,  @lightGradTop,  @lightGradBottom); /* for firefox 3.6+ */ 
+}
+
+.highlightGrad{
+	background: -webkit-gradient(linear, left top, left bottom, from(@darkGradTop), to(@darkGradBottom)); /* for webkit browsers */
+	background: -moz-linear-gradient(top,  @darkGradTop,  @darkGradBottom); /* for firefox 3.6+ */ 
+}
+
+.textMargin{
+	margin:8px;
+}
+
+#container{
+	width:1024px;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+#topbar{
+	.lightGrad;
+	float:right;
+	width:420px;
+	height:30px;
+	color: @textColor;
+	margin:5px;
+	.boldText;
+}
+
+#loginButton{
+	.highlightGrad;
+	float:right;
+  cursor: pointer;
+}
+
+#loginOverlay{
+  float:right;
+  visibility:hidden;
+  height: 100px;
+  width: 300px;
+  background-color:#fff;
+  margin-right: -425px;
+  margin-top: 50px;
+  .drop-shadow;
+}
+
+#loginButton:hover{
+	background-color:@darkGradTop;
+}
+
+#page{
+	margin-top:60px;
+	width:100%;
+	background-color:#fff;
+}
+
+/*
+Drop shadow things
+*/
+
+.drop-shadow {
+
+            background:#fff;
+
+            -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+
+               -moz-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+
+                    box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+
+        }
+
+ 
