@@ -3,10 +3,10 @@ $(document).ready(function() {
   // handling scrolling toolbar
   $(window).scroll(function(e){
     console.log('scrollin '+$('#toolbar').css('position')); 
-    if($(window).scrollTop()>75&&$('#toolbar').css('position')!='fixed'){
+    if($(window).scrollTop()>100&&$('#toolbar').css('position')!='fixed'){
       console.log('setting position to fixed');
       $('#toolbar').css('position','fixed');
-    }else if($(window).scrollTop()<=75&&$('#toolbar').css('position')!='static'){
+    }else if($(window).scrollTop()<=100&&$('#toolbar').css('position')!='static'){
       $('#toolbar').css('position','static');
     }
   }); // END window.scroll
@@ -14,7 +14,10 @@ $(document).ready(function() {
   $('#loginOverlay').dialog({
     autoOpen:false,
     show: 'blind',
-    hide: 'explode'
+    hide: 'explode',
+    resizable: false,
+    draggable:false,
+    modal:true
   });
 
   // handlingn login window close      
@@ -39,17 +42,7 @@ $(document).ready(function() {
         overlayFlag=true;
       }
    });
-   
-  // Login button stuff
-  $("#loginButton").hover(
-    function() {
-      $(this).removeClass('highlightGrad');
-      $(this).addClass('darkHighlightGrad');
-    },
-    function(){
-      $(this).removeClass('darkHighlightGrad');
-      $(this).addClass('highlightGrad');
-  });
+  
 
   // Edit button stuff
   $("#edit").toggle(function(){
@@ -57,7 +50,7 @@ $(document).ready(function() {
   },function(){
     deactivateEditMode();
   });
-
+  
   // This function is to turn on edit mode
   function activateEditMode(){
      
@@ -85,7 +78,10 @@ $(document).ready(function() {
   // this function renders or derenders the toolbar
   function renderToolbar(render){
     if(render){
-
+      // turn on each of the edit buttons
+    }
+    else{
+      // turn off each of the edit buttons
     }
 
   }
