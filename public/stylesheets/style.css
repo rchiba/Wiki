@@ -6,6 +6,11 @@ f1f3f3 - grad light bottom
 394f5a - dark blue
 fbf01d - light yellow
 f9b11c - dark yellow
+
+Camping Cyclist - kuler
+dd5f18 - dark orange
+fba922 - light orange
+ 
 */
 body {
   background-color: #e8eef1;
@@ -14,8 +19,6 @@ body {
 html, body {
   border-width: 0px;
   margin: 0px;
-  width: 100%;
-  height: 100%;
 }
 a {
   color: #394f5a;
@@ -38,6 +41,16 @@ a {
   background: -moz-linear-gradient(top, #fbf01d, #f9b11c);
   /* for firefox 3.6+ */
 }
+.darkHighlightGrad {
+  background: -webkit-gradient(linear, left top, left bottom, from(#fba922), to(#dd5f18));
+  /* for webkit browsers */
+
+  background: -moz-linear-gradient(top, #fba922, #dd5f18);
+  /* for firefox 3.6+ */
+}
+.grid {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAIElEQVQYV2NcdemDMQMewAhSEKYncBabGpDc0FGAz5sA2CEtAQK6H8UAAAAASUVORK5CYII=) repeat;
+}
 .textMargin {
   margin: 8px;
 }
@@ -52,20 +65,15 @@ a {
 
   background: -moz-linear-gradient(top, #feffff, #f1f3f3);
   /* for firefox 3.6+ */
-  float: right;
+  float: left;
   width: 420px;
   height: 30px;
+  margin-left: 604px;
   color: #394f5a;
-  margin: 5px;
   font-size: 12px;
   font-weight: bold;
 }
 #loginButton {
-  background: -webkit-gradient(linear, left top, left bottom, from(#fbf01d), to(#f9b11c));
-  /* for webkit browsers */
-
-  background: -moz-linear-gradient(top, #fbf01d, #f9b11c);
-  /* for firefox 3.6+ */
   float: right;
   cursor: pointer;
 }
@@ -75,19 +83,46 @@ a {
   height: 100px;
   width: 300px;
   background-color: #fff;
-  margin-right: -425px;
   margin-top: 50px;
   background: #fff;
   -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
   -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
 }
-#loginButton:hover {
-  background-color: #fbf01d;
+/*
+Toolbar stuff
+*/
+#toolbar {
+  margin-left: 424px;
+  width: 500px;
+  height: 30px;
+  top: 0px;
+}
+.toolbarButton {
+  height: 30px;
+  cursor: pointer;
+  float: right;
+  font-size: 12px;
+  font-weight: bold;
+  background: -webkit-gradient(linear, left top, left bottom, from(#fbf01d), to(#f9b11c));
+  /* for webkit browsers */
+
+  background: -moz-linear-gradient(top, #fbf01d, #f9b11c);
+  /* for firefox 3.6+ */
+}
+#edit {
+  width: 100px;
+}
+#addPhoto {
+  width: 80px;
+}
+#addTextBox {
+  width: 80px;
 }
 #page {
   margin-top: 60px;
   width: 100%;
+  height: 1000px;
   background-color: #fff;
 }
 /*

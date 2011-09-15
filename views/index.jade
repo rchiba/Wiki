@@ -1,10 +1,26 @@
-#container container
+#container
+  //logo img
   #topbar 
     .textMargin(style="float:left;")
       a(href="", target="_blank") about
       a(href="", target="_blank", style="margin-left:10px") tour
-    #loginButton
+    #loginButton.highlightGrad
       .textMargin 
         |  login
-  #loginOverlay
-  #page page
+        
+  #loginOverlay(title="Login") 
+    p
+      form#loginForm(action="", method="post")
+        |  email: 
+        input(type="text", name="email")
+        br
+        |  password: 
+        input(type="text", name="password")
+        br
+        input(id="loginSubmitButton", type="submit", value="login")
+  
+  #page
+    #toolbar
+      #edit.toolbarButton Edit
+      #addPhoto.toolbarButton Add Pic
+      #addTextBox.toolbarButton Add Text

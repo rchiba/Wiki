@@ -6,6 +6,11 @@ f1f3f3 - grad light bottom
 394f5a - dark blue
 fbf01d - light yellow
 f9b11c - dark yellow
+
+Camping Cyclist - kuler
+dd5f18 - dark orange
+fba922 - light orange
+ 
 */
 
 // Color vars
@@ -14,15 +19,20 @@ f9b11c - dark yellow
 @lightGradBottom: #f1f3f3;
 @darkGradTop: #fbf01d; 
 @darkGradBottom: #f9b11c; 
+@darkGradTopHover: #fba922;
+@darkGradBottomHover: #dd5f18;
 @a: #394f5a;
 @textColor: #394f5a;
+
+// The below CSS is organized in the general order of its appearance
+// on the page.
 
 body {
   background-color: @background;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-html, body { border-width: 0px; margin: 0px; width: 100%; height: 100%; }
+html, body { border-width: 0px; margin: 0px;  }
 
 a {
   color: @a;
@@ -43,6 +53,15 @@ a {
 	background: -moz-linear-gradient(top,  @darkGradTop,  @darkGradBottom); /* for firefox 3.6+ */ 
 }
 
+.darkHighlightGrad{
+	background: -webkit-gradient(linear, left top, left bottom, from(@darkGradTopHover), to(@darkGradBottomHover)); /* for webkit browsers */
+	background: -moz-linear-gradient(top,  @darkGradTopHover,  @darkGradBottomHover); /* for firefox 3.6+ */ 
+}
+
+.grid{
+  background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAIElEQVQYV2NcdemDMQMewAhSEKYncBabGpDc0FGAz5sA2CEtAQK6H8UAAAAASUVORK5CYII=) repeat;
+}
+
 .textMargin{
 	margin:8px;
 }
@@ -55,18 +74,17 @@ a {
 
 #topbar{
 	.lightGrad;
-	float:right;
+	float:left;
 	width:420px;
 	height:30px;
+  margin-left:604px;
 	color: @textColor;
-	margin:5px;
 	.boldText;
 }
 
 #loginButton{
-	.highlightGrad;
 	float:right;
-  cursor: pointer;
+    cursor: pointer;
 }
 
 #loginOverlay{
@@ -75,18 +93,50 @@ a {
   height: 100px;
   width: 300px;
   background-color:#fff;
-  margin-right: -425px;
   margin-top: 50px;
   .drop-shadow;
 }
 
-#loginButton:hover{
-	background-color:@darkGradTop;
+#loginSubmitButton{
+
 }
 
+/*
+Toolbar stuff
+*/
+
+#toolbar{
+  margin-left:424px;  
+  width:500px;
+  height:30px;
+  top:0px;
+}
+
+.toolbarButton{
+  height:30px;
+  cursor:pointer;
+  float:right;
+  .boldText;
+  .highlightGrad;
+}
+
+#edit{
+  width:100px;
+}
+
+#addPhoto{
+  width:80px;
+}
+
+#addTextBox{
+  width:80px;
+}
+
+// Page - the main drawing space
 #page{
 	margin-top:60px;
 	width:100%;
+  height:1000px;
 	background-color:#fff;
 }
 
@@ -96,14 +146,11 @@ Drop shadow things
 
 .drop-shadow {
 
-            background:#fff;
+  background:#fff;
+  -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+  -moz-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+  box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
 
-            -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
-
-               -moz-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
-
-                    box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
-
-        }
+}
 
  
