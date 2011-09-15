@@ -20,7 +20,7 @@ $(document).ready(function() {
     modal:true
   });
 
-  // handlingn login window close      
+  // handling login window close      
   var overlayFlag = false; 
   $(document.body).click(function(e){
     if($(e.target).parents().index($('#loginOverlay'))<0&&$('#loginOverlay').css('visibility')=='visible'&&!overlayFlag){
@@ -54,8 +54,9 @@ $(document).ready(function() {
   // This function is to turn on edit mode
   function activateEditMode(){
      
-    // add grid class
+    // add grid class, and other changes
     $('#page').addClass('grid');
+    $('#edit').text('Done');
 
     // render toolbar
     renderToolbar(true);
@@ -69,6 +70,7 @@ $(document).ready(function() {
 
     // remove grid class
     $('#page').removeClass('grid');
+    $('#edit').text('Edit');
     
     // derender toolbar
     renderToolbar(false);
@@ -79,11 +81,37 @@ $(document).ready(function() {
   function renderToolbar(render){
     if(render){
       // turn on each of the edit buttons
+        $('.editorButton').each(function(index){
+          $(this).css('display','block');
+        });
     }
     else{
       // turn off each of the edit buttons
+        $('.editorButton').each(function(index){
+          $(this).css('display','none');
+        });
     }
 
   }
+  
+  // handler for add text
+  $('#addTextBox').click(function(){
+    var d = new Date();
+    var newElement = $("<textarea>");
+    $('#content').append(newElement);
+    newElement.addClass("textElement").attr('id',d.getTime());
+    newElement.css('height',200).css('width',200).css('background-color','#ccc').css('opacity',.5);
+    newElement.resizable({
+      containment: "#content",
+      grid: [8,8],
+      maxWidth:1024
+    }).parent().draggable({
+      containment: "#content",
+      grid: [8,8],
+      scroll: true,
+      scrollSpeed:50,
+      scrollSensitivity: 100
+    });
+  });
 
 });

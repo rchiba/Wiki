@@ -104,7 +104,7 @@ Toolbar stuff
 #toolbar {
   margin-left: 524px;
   width: 500px;
-  height: 15px;
+  height: 0px;
   top: 0px;
 }
 .toolbarButton {
@@ -119,9 +119,12 @@ Toolbar stuff
   background: -moz-linear-gradient(top, #fbf01d, #f9b11c);
   /* for firefox 3.6+ */
   margin-left: 2px;
+  z-index: 1000;
+  position: relative;
 }
 #edit {
   width: 40px;
+  display: block;
 }
 #addPhoto {
   width: 50px;
@@ -133,9 +136,14 @@ Toolbar stuff
 }
 #page {
   margin-top: 50px;
-  width: 100%;
+  width: 1024px;
   height: 1000px;
   background-color: #fff;
+}
+#content {
+  width: 1024px;
+  height: 800px;
+  position: relative;
 }
 /*
 Drop shadow things
