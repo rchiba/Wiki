@@ -1,16 +1,16 @@
 /*
- * Textbox Widget
+ * TextBox Widget
  * Used for editable widgetness
  */
  
-function Textbox(config){
-    Textbox.superclass.constructor.apply(this,arguments);
+function TextBox(config){
+    TextBox.superclass.constructor.apply(this,arguments);
 }
 
-Textbox.NAME = "textbox";
+TextBox.NAME = "textBox";
 
 // Vars
-Textbox.ATTRS = {
+TextBox.ATTRS = {
 
     // the state of the textbox
     // can be display, move, or text
@@ -28,7 +28,7 @@ Textbox.ATTRS = {
 };
 
 // Methods
-Y.extend(Textbox, Widget, {
+Y.extend(TextBox, Box, {
 
 
 

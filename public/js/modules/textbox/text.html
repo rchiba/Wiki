@@ -1,22 +1,36 @@
 <html>
 <head>
-<script src="http://yui.yahooapis.com/3.4.0/build/yui/yui-min.js"></script>
+
+<script type="text/javascript" src="http://yui.yahooapis.com/3.4.0/build/yui/yui-min.js"></script>
+<script type="text/javascript" src="box.js"></script>
+
 <script type="text/javascript">
 // Tests for textbox
 
-YUI().use('node', 'textbox', function (Y) {
+YUI().use('node', 'box', function (Y) {
 
-  Y.one('#textBox').
-
+  Y.on('domready', function(){
+      Y.one('#create').on('click',function(){
+        console.log('create clicked');
+        var box = new Y.Box.regular({
+            parentNode:'#parent'
+        });
+        box.render(Y.one('#parent'));
+      });
+  });
+  
 });
 
 </script>
 </head>
 
 <body>
-<input type="button" value="Toggle">
+<input type="button" value="Create" id="create">
+<input type="button" value="+DD" id="initializeDD">
+<input type="button" value="-DD" id="destroyDD">
+<div id="parent" style="height:500px; width:700px; background-color:#eee;"></div>
 
-<div id="textBox" style="width:300px; height:200px; background-color:#ccc"></div>
+<div style="height:300px;width:300px;background-color:#ddd" contenteditable=true></div>
 
 </body>
 
