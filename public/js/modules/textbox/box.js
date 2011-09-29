@@ -13,6 +13,12 @@ Box = Y.Base.create("box", Y.Widget, [], {
     // nothing to be initialized so far
     initializer: function(config) {
         Y.log('initializing');
+        
+        this.publish('setStaticAll', {
+            broadcast: 1,
+            emitFacade: true
+        });
+        
     },
     
     // detach event handlers, etc.
@@ -60,6 +66,11 @@ Box = Y.Base.create("box", Y.Widget, [], {
             that.setState('static');
         });
         
+        Y.after('box:setStaticAll', function (e) { 
+            that.setState('static');
+        }, this);
+        
+        
     },
     
     syncUI: function(){
@@ -83,15 +94,24 @@ Box = Y.Base.create("box", Y.Widget, [], {
         this.set('state',state);
         switch(state){
             case 'static':
-                this.destroyDD();
+                //this.destroyDD();
+                this.hideDD();
                 this.get('rBox').setAttribute('contentEditable', 'false');
+                this.get('rBox').setStyle('opacity',this.get('opacity'));
             break;
             case 'move':
+                this.fire('setStaticAll');
                 this.initializeDD();
+                this.showDD();
                 this.get('rBox').setAttribute('contentEditable', 'false');
+                this.get('rBox').setStyle('opacity',this.get('opacity'));
             break;
             case 'edit':
                 this.destroyDD();
+                var o = parseFloat(this.get('rBox').getStyle('opacity'));
+                Y.log('o is '+o);
+                Y.log(typeof o);
+                this.get('rBox').setStyle('opacity',o+.2);
                 this.get('rBox').setAttribute('contentEditable', 'true');
             break;
         }
@@ -101,28 +121,31 @@ Box = Y.Base.create("box", Y.Widget, [], {
     initializeDD: function(){
     
         Y.log('initializing DD');
-    
+        
         var rBox = this.get('rBox');
         var bBox = this.get('bBox')
-    
-        var dd = new Y.DD.Drag({
-            node: rBox
-        }).plug(Y.Plugin.DDConstrained, {
-            constrain2node: bBox.get('parentNode'),
-            tickX:8,
-            tickY:8
-        });
         
-        var resize = new Y.Resize({
-            node:rBox
-        }).plug(Y.Plugin.ResizeConstrained, {
-            constrain: bBox.get('parentNode'),
-            tickX:8,
-            tickY:8
-        });
+        if(this.get('dd') == null){
+            var dd = new Y.DD.Drag({
+                node: rBox
+            }).plug(Y.Plugin.DDConstrained, {
+                constrain2node: bBox.get('parentNode'),
+                tickX:8,
+                tickY:8
+            });
+            this.set('dd',dd);
+        }
         
-        this.set('dd',dd);
-        this.set('resize',resize);
+        if(this.get('resize') == null){
+            var resize = new Y.Resize({
+                node:rBox
+            }).plug(Y.Plugin.ResizeConstrained, {
+                constrain: bBox.get('parentNode'),
+                tickX:8,
+                tickY:8
+            });
+            this.set('resize',resize);
+        }
         
     },
     
@@ -130,15 +153,46 @@ Box = Y.Base.create("box", Y.Widget, [], {
     
         Y.log('destroyingDD');
     
-        this.get('dd').destroy();
-        this.get('resize').destroy();
+        if(this.get('dd') != null){
+            this.get('dd').destroy();
+            this.set('dd', null);
+        }
+        
+        if(this.get('resize') != null){
+            this.get('resize').destroy();
+            this.set('resize', null);
+        }
+        
         this.bindRBox();
+    },
+    
+    hideDD: function(){
+        this.get('rBox').all('.yui3-resize-handles-wrapper').each(function(item){
+            item.setStyle('display','none');
+        });
+    },
+    
+    showDD: function(){
+        this.get('rBox').all('.yui3-resize-handles-wrapper').each(function(item){
+            item.setStyle('display','block');
+        });
     },
     
     bindRBox: function(){
         Y.log('bindRBox');
         
         var that = this;
+        
+        Y.one(that.get('rBox')).on('mousedown', function(e){
+            Y.log('rBox click');
+            
+            switch(that.get('state')){
+                case  'static':
+                    that.setState('move');
+                    break;
+            }
+            e.stopPropagation();
+        });
         
         Y.one(that.get('rBox')).on('click', function(e){
             Y.log('rBox click');
@@ -154,6 +208,11 @@ Box = Y.Base.create("box", Y.Widget, [], {
         that.get('rBox').on('dblclick', function(e){
             Y.log('rBox dblclick');
             that.setState('edit');
+            e.stopPropagation();
+        });
+        
+        that.get('rBox').on('drag:start', function(e){
+            Y.log('dragStart');
             e.stopPropagation();
         });
     }
@@ -172,9 +231,16 @@ ATTRS: {
         
         bBox: {},
         
-        dd:{},
+        // YUI DD plugin
+        dd:{
+            value: null
+        },
         
-        resize:{},
+        // YUI Resize plugin
+        resize:{
+            value: null
+        },
+        
         
         // state can be static, move, or edit
         state: {
@@ -192,6 +258,13 @@ ATTRS: {
         includeTitle: {
             value: true,
             validator: Y.Lang.isBoolean
+        },
+        
+        // style things
+        
+        // opacity of static state
+        opacity: {
+            value: .7 // defaults to .7
         }
     }
 });

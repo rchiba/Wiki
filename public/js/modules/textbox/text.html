@@ -11,11 +11,17 @@ YUI().use('node', 'box', function (Y) {
 
   Y.on('domready', function(){
       Y.one('#create').on('click',function(){
-        console.log('create clicked');
         var box = new Y.Box.regular({
             parentNode:'#parent'
         });
         box.render(Y.one('#parent'));
+      });
+      
+      Y.one('#create2').on('click',function(){
+        var pic = new Y.PicBox.regular({
+            parentNode:'#parent'
+        });
+        pic.render(Y.one('#parent'));
       });
   });
   
@@ -25,7 +31,8 @@ YUI().use('node', 'box', function (Y) {
 </head>
 
 <body>
-<input type="button" value="Create" id="create">
+<input type="button" value="Create Text" id="create">
+<input type="button" value="Create Pic" id="create2">
 <input type="button" value="+DD" id="initializeDD">
 <input type="button" value="-DD" id="destroyDD">
 <div id="parent" style="height:500px; width:700px; background-color:#eee;"></div>
