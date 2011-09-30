@@ -7,15 +7,17 @@
 <script type="text/javascript">
 // Tests for textbox
 
-YUI().use('node', 'box', function (Y) {
+YUI().use('node', 'box', 'sensor', function (Y) {
 
   Y.on('domready', function(){
       Y.one('#create').on('click',function(){
-        var box = new Y.Box.regular({
+        var box = new Y.pixel.Box({
             parentNode:'#parent'
         });
         box.render(Y.one('#parent'));
       });
+      
+      var sensor = new Y.pixel.Sensor();
       
       Y.one('#create2').on('click',function(){
         var pic = new Y.PicBox.regular({

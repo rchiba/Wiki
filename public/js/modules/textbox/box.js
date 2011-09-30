@@ -14,7 +14,7 @@ Box = Y.Base.create("box", Y.Widget, [], {
     initializer: function(config) {
         Y.log('initializing');
         
-        this.publish('setStaticAll', {
+        this.publish('setState', {
             broadcast: 1,
             emitFacade: true
         });
@@ -36,7 +36,7 @@ Box = Y.Base.create("box", Y.Widget, [], {
         rBox.setStyle('width', '80px');
         rBox.setStyle('height', '80px');
         rBox.setStyle('position', 'absolute');
-        rBox.setStyle('background-color','#abc');
+        rBox.setStyle('backgroundColor','#abc');
         rBox.setStyle('padding','10px');
         rBox.setStyle('opacity','.7');
         rBox.setAttribute('contentEditable', 'true');
@@ -62,14 +62,9 @@ Box = Y.Base.create("box", Y.Widget, [], {
         that.bindRBox();
 
         that.get('bBox').get('parentNode').on('click', function(e){
-            Y.log('somebody clicked a parentNode');
             that.setState('static');
         });
-        
-        Y.after('box:setStaticAll', function (e) { 
-            that.setState('static');
-        }, this);
-        
+       
         
     },
     
@@ -100,7 +95,7 @@ Box = Y.Base.create("box", Y.Widget, [], {
                 this.get('rBox').setStyle('opacity',this.get('opacity'));
             break;
             case 'move':
-                this.fire('setStaticAll');
+                this.fire('setState',{state:'move',node:this});
                 this.initializeDD();
                 this.showDD();
                 this.get('rBox').setAttribute('contentEditable', 'false');
@@ -167,8 +162,13 @@ Box = Y.Base.create("box", Y.Widget, [], {
     },
     
     hideDD: function(){
-        this.get('rBox').all('.yui3-resize-handles-wrapper').each(function(item){
-            item.setStyle('display','none');
+        this.get('rBox').all('.yui3-resize-handles-wrapper').each(function(item){ 
+            Y.log('checking display and inside is '+item.get('text').trim()+typeof item.get('text'));
+            if(item.get('text').trim()==''){
+            // to fix a bug in IE
+                Y.log('setting to display:none');
+                item.setStyle('display','none');
+            }
         });
     },
     
@@ -211,10 +211,6 @@ Box = Y.Base.create("box", Y.Widget, [], {
             e.stopPropagation();
         });
         
-        that.get('rBox').on('drag:start', function(e){
-            Y.log('dragStart');
-            e.stopPropagation();
-        });
     }
 
 },{
@@ -269,6 +265,6 @@ ATTRS: {
     }
 });
 
-Y.namespace('Box').regular = Box;
+Y.namespace('pixel').Box = Box;
 
 }, "0.1", { requires: ['widget', 'substitute', 'jsonp', 'base', 'dd-constrain', 'resize'] });
