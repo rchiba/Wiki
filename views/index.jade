@@ -1,5 +1,5 @@
 #container
-  #logo wikibox 
+  #logo pixlwiki 
   #topbar 
     .textMargin(style="float:left;")
       a(href="", target="_blank") about
@@ -7,10 +7,11 @@
     #loginButton.highlightGrad
       .textMargin 
         |  login
-        
-  #loginOverlay(title="Login") 
-    p
-      form#loginForm(action="", method="post")
+  
+  //      
+      #loginOverlay(title="Login") 
+        p
+          form#loginForm(action="", method="post")
         |  email: 
         input(type="text", name="email")
         br

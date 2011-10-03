@@ -87,25 +87,6 @@ $(document).ready(function() {
 
   }
   
-  // handler for add text
-  $('#addTextBox').click(function(){
-    var d = new Date();
-    var newElement = $("<textarea>");
-    $('#content').append(newElement);
-    newElement.addClass("textElement").attr('id',d.getTime());
-    newElement.css('height',200).css('width',200).css('background-color','#ccc').css('opacity',.5);
-    newElement.resizable({
-      containment: "#content",
-      grid: [8,8],
-      maxWidth:1024
-    }).parent().draggable({
-      containment: "#content",
-      grid: [8,8],
-      scroll: true,
-      scrollSpeed:50,
-      scrollSensitivity: 100
-    });
-  });
 
 });
 
@@ -118,6 +99,7 @@ YUI({
     
         // Sensor class keeps track of all nodes
         var sensor = new Y.pixel.Sensor();
+        var boxes = [];
 
         Y.one('#addTextBox').on('click',function(){
             var box = new Y.pixel.Box({
@@ -127,16 +109,32 @@ YUI({
             box.render(Y.one('#content'));
             sensor.bindBoxes();
             box.setState('move');
+            boxes.push(box);
         });
         
         Y.one('#addPhoto').on('click',function(){
             var pic = new Y.pixel.PicBox({
                 parentNode:'#content',
-                pic:'/public/js/modules/box/shadow.JPG'
+                pic:'/js/modules/box/shadow.JPG'
             });
             pic.render(Y.one('#content'));
             sensor.bindBoxes();
             pic.setState('move');
+            boxes.push(box);
+        });
+
+        Y.one('#edit').on('click',function(){
+            var buttonContent = Y.one('#edit').get('text');
+            // Use the contents of the button to determine state
+            if(buttonContent === 'Done'){
+                boxes.forEach(function(item){
+                    item.destroyDD();
+                });
+            }else{
+                boxes.forEach(function(item){
+                    item.initializeDD(); 
+                });
+            }
         });
   
     }); // end domready
