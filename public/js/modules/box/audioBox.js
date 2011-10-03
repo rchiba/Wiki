@@ -15,6 +15,7 @@ AudioBox = Y.Base.create("audioBox", Y.pixel.Box, [], {
         var bBox = this.get('boundingBox');
         var cBox = this.get('contentBox');
         var rBox = Y.Node.create('<div>');
+        // including two audio sources for max compatibility
         var audio = Y.Node.create('<audio>');
         var mp3Source = Y.Node.create('<source>');
         var oggSource = Y.Node.create('<source>');
@@ -22,7 +23,7 @@ AudioBox = Y.Base.create("audioBox", Y.pixel.Box, [], {
         oggSource.setAttribute('type','audio/ogg');
         mp3Source.setAttribute('src',this.get('mp3Src'));
         oggSource.setAttribute('src',this.get('oggSrc'));
-        audio.setAttribute('controls',controls);
+        audio.setAttribute('controls','controls');
         audio.addClass('audioBox');
 
         audio.insert(mp3Source);
@@ -136,8 +137,7 @@ ATTRS: {
 
         strings: {
             value: {
-                title:  'Latest Updates',
-                error:  'Oops!  We had some trouble connecting to Twitter :('
+                title:  'Audio'
             }
         },
 
@@ -153,12 +153,13 @@ ATTRS: {
             value: 1 // defaults to 1
         },
         
-        // string url to image
-        pic: {},
+        // string url to audio
+        mp3Src: {}, // for safari, IE
+        oggSrc: {} // for firefox, opera
         
     }
 });
 
-Y.namespace('pixel').PicBox = PicBox;
+Y.namespace('pixel').AudioBox = AudioBox;
 
 }, "0.1", { requires: ['widget', 'substitute', 'jsonp', 'base', 'dd-constrain', 'resize'] });

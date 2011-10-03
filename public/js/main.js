@@ -93,7 +93,7 @@ $(document).ready(function() {
 YUI({
     debug:true,
     useBrowserConsole: true,
-    }).use('node', 'box', 'picbox', 'sensor', 'event-synthetic', function (Y) {
+    }).use('node', 'box', 'picbox', 'audiobox', 'sensor', 'event-synthetic', function (Y) {
 
     Y.on('domready', function(){
     
@@ -120,13 +120,26 @@ YUI({
             pic.render(Y.one('#content'));
             sensor.bindBoxes();
             pic.setState('move');
-            boxes.push(box);
+            boxes.push(pic);
+        });
+
+        Y.one('#addAudio').on('click',function(){
+            var audio = new Y.pixel.AudioBox({
+                parentNode:'#content',
+                mp3Src:'/js/modules/box/shadow',
+                oggSrc:''
+            });
+            audio.render(Y.one('#content'));
+            sensor.bindBoxes();
+            audio.setState('move');
+            boxes.push(audio);
         });
 
         Y.one('#edit').on('click',function(){
             var buttonContent = Y.one('#edit').get('text');
             // Use the contents of the button to determine state
-            if(buttonContent === 'Done'){
+            Y.log('buttonContent is '+buttonContent, 'debug');
+            if(buttonContent == 'Done'){
                 boxes.forEach(function(item){
                     item.destroyDD();
                 });
