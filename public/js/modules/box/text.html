@@ -6,6 +6,8 @@
 <script type="text/javascript" src="box.js"></script>
 <script type="text/javascript" src="sensor.js"></script>
 <script type="text/javascript" src="picBox.js"></script>
+<script type="text/javascript" src="audioBox.js"></script>
+<script type="text/javascript" src="videoBox.js"></script>
 
 <script type="text/javascript">
 // Tests for textbox
@@ -14,7 +16,7 @@ YUI({
     debug:true,
     useBrowserConsole: true,
     
-}).use('node', 'box', 'picbox', 'sensor', 'event-synthetic', function (Y) {
+}).use('node', 'box', 'picbox', 'audiobox', 'videobox', 'sensor', 'event-synthetic', function (Y) {
 
   Y.on('domready', function(){
   
@@ -55,6 +57,27 @@ YUI({
         sensor.bindBoxes();
         pic.setState('move');
       });
+      
+      Y.one('#createAudio').on('click',function(){
+        var audio = new Y.pixel.AudioBox({
+            parentNode:'#parent',
+            mp3Src:'audio.mp3'
+        });
+        audio.render(Y.one('#parent'));
+        sensor.bindBoxes();
+        audio.setState('move');
+      });
+      
+      Y.one('#createVideo').on('click',function(){
+        var video = new Y.pixel.VideoBox({
+            parentNode:'#parent',
+            videoLink:'http://youtu.be/QH2-TGUlwu4'
+        });
+        video.render(Y.one('#parent'));
+        sensor.bindBoxes();
+        video.setState('move');
+      });
+      
   });
   
 });
@@ -66,6 +89,8 @@ YUI({
 <input type="button" value="Create Text" id="create">
 <input type="button" value="Create Label" id="createLabel">
 <input type="button" value="Create Pic" id="create2">
+<input type="button" value="Create Audio" id="createAudio">
+<input type="button" value="Create Video" id="createVideo">
 <input type="button" value="+DD" id="initializeDD">
 <input type="button" value="-DD" id="destroyDD">
 <div id="parent" style="height:500px; width:700px; background-color:#eee;"></div>

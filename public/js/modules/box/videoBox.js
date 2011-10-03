@@ -1,13 +1,13 @@
-YUI.add('audiobox', function(Y){
+YUI.add('videobox', function(Y){
 
-var AudioBox;
+var VideoBox;
 
 /*
- * audioBox Widget
- * Used to add an audio element
+ * VideoBox Widget
+ * Used for editable widgetness
  */
  
-AudioBox = Y.Base.create("audioBox", Y.pixel.Box, [], {
+VideoBox = Y.Base.create("videoBox", Y.pixel.Box, [], {
     
     renderUI: function() {
         Y.log('renderUI', 'debug');
@@ -15,26 +15,13 @@ AudioBox = Y.Base.create("audioBox", Y.pixel.Box, [], {
         var bBox = this.get('boundingBox');
         var cBox = this.get('contentBox');
         var rBox = Y.Node.create('<div>');
-        // including two audio sources for max compatibility
-        var audio = Y.Node.create('<audio>');
-        var mp3Source = Y.Node.create('<source>');
-        var oggSource = Y.Node.create('<source>');
-        mp3Source.setAttribute('type','audio/mpeg');
-        oggSource.setAttribute('type','audio/ogg');
-        mp3Source.setAttribute('src',this.get('mp3Src'));
-        oggSource.setAttribute('src',this.get('oggSrc'));
-        audio.setAttribute('controls','controls');
-        audio.addClass('audioBox');
-
-        audio.insert(mp3Source);
-        audio.insert(oggSource);
-
-        rBox.setStyle('position', 'absolute');
-        rBox.setStyle('backgroundColor','#fff');
-        rBox.setStyle('padding','10px');
+        var vid = Y.Node.create('<iframe>');
+        vid.setAttribute('src',this.parseVideoLink(this.get('videoLink')));
+        vid.addClass('resizeVideo');
+        rBox.addClass('videoRbox');
         
         cBox.insert(rBox);
-        rBox.insert(audio);
+        rBox.insert(vid);
         this.set('rBox', rBox);
         this.set('bBox', bBox);
         
@@ -88,7 +75,50 @@ AudioBox = Y.Base.create("audioBox", Y.pixel.Box, [], {
             this.set('dd',dd);
         }
         
-        // do not create a resize element
+        if(this.get('resize') == null){
+            var resize = new Y.Resize({
+                node:rBox
+            }).plug(Y.Plugin.ResizeConstrained, {
+                constrain: bBox.get('parentNode'),
+                tickX:8,
+                tickY:8,
+                preserveRatio: true,
+                minWidth: 50,
+                minHeight: 50
+            });
+            this.set('resize',resize);
+        }
+        
+    },
+    
+    // Changes urls like http://www.youtube.com/watch?v=Pd02Q-54wuQ to an url like http://www.youtube.com/embed/Pd02Q-54wuQ
+    // eventually will support other video inputs (vimeo, people who paste iframe codes, etc)
+    parseVideoLink: function(rawUrl){
+        
+        // validate as string
+        if(typeof rawUrl !== 'string'){
+            return '';
+        }
+        
+        // add http if necessary
+        if(!/^http:[\/]{2}/.test(rawUrl)){
+            rawUrl = 'http://'+rawUrl;
+        }
+        
+        var cleanUrl = '';
+        
+        // links to page http://www.youtube.com/watch?v=Pd02Q-54wuQ
+        if(rawUrl.indexOf('watch?v=') !== -1){
+            cleanUrl = rawUrl.replace('watch?v=', 'embed/');
+        }
+        // direct tinyurls to player http://youtu.be/Pd02Q-54wuQ
+        else if(rawUrl.indexOf('youtu.be/') !== -1){
+            cleanUrl = rawUrl.replace('youtu.be/','www.youtube.com/embed/');
+        }
+        
+        Y.log('parseVideoLink returning '+cleanUrl);
+        
+        return cleanUrl;
         
     }
 
@@ -125,7 +155,8 @@ ATTRS: {
 
         strings: {
             value: {
-                title:  'Audio'
+                title:  'Latest Updates',
+                error:  'Oops!  We had some trouble connecting to Twitter :('
             }
         },
 
@@ -141,13 +172,12 @@ ATTRS: {
             value: 1 // defaults to 1
         },
         
-        // string url to audio
-        mp3Src: {}, // for safari, IE
-        oggSrc: {} // for firefox, opera
+        // string url to video (this gets parsed)
+        videoLink: {},
         
     }
 });
 
-Y.namespace('pixel').AudioBox = AudioBox;
+Y.namespace('pixel').VideoBox = VideoBox;
 
 }, "0.1", { requires: ['widget', 'substitute', 'jsonp', 'base', 'dd-constrain', 'resize'] });
