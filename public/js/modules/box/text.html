@@ -1,0 +1,77 @@
+<html>
+<head>
+
+<link rel="stylesheet" type="text/css" href="boxStyle.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/3.4.0/build/yui/yui-min.js"></script>
+<script type="text/javascript" src="box.js"></script>
+<script type="text/javascript" src="sensor.js"></script>
+<script type="text/javascript" src="picBox.js"></script>
+
+<script type="text/javascript">
+// Tests for textbox
+
+YUI({
+    debug:true,
+    useBrowserConsole: true,
+    
+}).use('node', 'box', 'picbox', 'sensor', 'event-synthetic', function (Y) {
+
+  Y.on('domready', function(){
+  
+      Y.log('domready');
+      var sensor = new Y.pixel.Sensor();
+      
+      Y.one('#create').on('click',function(){
+        var box = new Y.pixel.Box({
+            parentNode:'#parent',
+            defaultClass:'contrast'
+        });
+        box.render(Y.one('#parent'));
+        
+        sensor.bindBoxes();
+        
+        box.setState('move');
+        
+      });
+      
+      Y.one('#createLabel').on('click',function(){
+        var box = new Y.pixel.Box({
+            parentNode:'#parent',
+            defaultClass:'contrastTitle'
+        });
+        box.render(Y.one('#parent'));
+        sensor.bindBoxes();
+        box.setState('move');
+        
+      });
+      
+
+      Y.one('#create2').on('click',function(){
+        var pic = new Y.pixel.PicBox({
+            parentNode:'#parent',
+            pic:'shadow.JPG'
+        });
+        pic.render(Y.one('#parent'));
+        sensor.bindBoxes();
+        pic.setState('move');
+      });
+  });
+  
+});
+
+</script>
+</head>
+
+<body>
+<input type="button" value="Create Text" id="create">
+<input type="button" value="Create Label" id="createLabel">
+<input type="button" value="Create Pic" id="create2">
+<input type="button" value="+DD" id="initializeDD">
+<input type="button" value="-DD" id="destroyDD">
+<div id="parent" style="height:500px; width:700px; background-color:#eee;"></div>
+
+<div style="height:300px;width:300px;background-color:#ddd" contenteditable=true></div>
+
+</body>
+
+</html>

@@ -11,14 +11,7 @@ $(document).ready(function() {
     }
   }); // END window.scroll
 
-  $('#loginOverlay').dialog({
-    autoOpen:false,
-    show: 'blind',
-    hide: 'explode',
-    resizable: false,
-    draggable:false,
-    modal:true
-  });
+  
 
   // handling login window close      
   var overlayFlag = false; 
@@ -115,3 +108,37 @@ $(document).ready(function() {
   });
 
 });
+
+YUI({
+    debug:true,
+    useBrowserConsole: true,
+    }).use('node', 'box', 'picbox', 'sensor', 'event-synthetic', function (Y) {
+
+    Y.on('domready', function(){
+    
+        // Sensor class keeps track of all nodes
+        var sensor = new Y.pixel.Sensor();
+
+        Y.one('#addTextBox').on('click',function(){
+            var box = new Y.pixel.Box({
+                parentNode:'#content',
+                defaultClass:'contrast'
+            });
+            box.render(Y.one('#content'));
+            sensor.bindBoxes();
+            box.setState('move');
+        });
+        
+        Y.one('#addPhoto').on('click',function(){
+            var pic = new Y.pixel.PicBox({
+                parentNode:'#content',
+                pic:'/public/js/modules/box/shadow.JPG'
+            });
+            pic.render(Y.one('#content'));
+            sensor.bindBoxes();
+            pic.setState('move');
+        });
+  
+    }); // end domready
+    
+});// end YUI
