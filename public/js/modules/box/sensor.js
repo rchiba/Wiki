@@ -6,6 +6,13 @@ Sensor = Y.Base.create('sensor', Y.Base, [], {
 
     initializer : function(cfg) {
         Y.log('initializing sensor', 'debug');
+        
+        // allDone - fired when entering total non-editing state
+        this.publish('setState', {
+            broadcast: 1,
+            emitFacade: true
+        });
+        
         this.defineKeys();
         this.bindUI();
     },
@@ -44,6 +51,8 @@ Sensor = Y.Base.create('sensor', Y.Base, [], {
             this.sub.detach();
         }
         
+        // subscribe to the events of all boxes
+        
         // listen to the setState for updates
         this.sub = Y.after('box:setState',function(e){
             that.handleSetState(e);
@@ -64,6 +73,8 @@ Sensor = Y.Base.create('sensor', Y.Base, [], {
             that.handleSetState(e);
         },this);
         
+        
+        
     },
     
     // handling of things having their state changing
@@ -73,13 +84,16 @@ Sensor = Y.Base.create('sensor', Y.Base, [], {
             
         // set the old node to static
         if(that.get('nodesSelected')){
-            that.get('nodesSelected').setState('static');
+            if(that.get('nodesSelected') != e.node){
+                // newly clicked node is not same as previously clicked node
+                Y.log('handleSetState: setting '+e.node+' to static', 'debug');
+                that.get('nodesSelected').setState('static');
+            }
         }
         
         // set new as the one selected 
         Y.log('setting nodesSelected');
         that.set('nodesSelected', e.node);
-        Y.log(that);
     },
     
     // define key events
@@ -150,6 +164,12 @@ Sensor = Y.Base.create('sensor', Y.Base, [], {
             left: (x + 'px'),
             duration: .2
         });
+    },
+    
+    // triggered by outside, to set all nodes to state
+    broadcastState: function(myState){
+        Y.log('sensor->broadcastState: '+myState);
+        this.fire('setState',{state:myState});
     }
     
 },{

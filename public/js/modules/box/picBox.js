@@ -36,6 +36,11 @@ PicBox = Y.Base.create("picBox", Y.pixel.Box, [], {
         Y.log('setting state to '+state);
         this.set('state',state);
         switch(state){
+            case 'done':
+                this.destroyDD();
+                this.get('rBox').setAttribute('contentEditable', 'false');
+                this.get('rBox').setStyle('opacity',this.get('opacity'));
+            break;
             case 'static':
                 //this.destroyDD();
                 this.hideDD();

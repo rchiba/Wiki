@@ -107,9 +107,7 @@ YUI({
                 defaultClass:'contrast'
             });
             box.render(Y.one('#content'));
-            sensor.bindBoxes();
             box.setState('move');
-            boxes.push(box);
         });
         
         Y.one('#addPhoto').on('click',function(){
@@ -118,21 +116,17 @@ YUI({
                 pic:'/js/modules/box/shadow.JPG'
             });
             pic.render(Y.one('#content'));
-            sensor.bindBoxes();
             pic.setState('move');
-            boxes.push(pic);
         });
 
         Y.one('#addAudio').on('click',function(){
             var audio = new Y.pixel.AudioBox({
                 parentNode:'#content',
-                mp3Src:'/js/modules/box/shadow',
+                mp3Src:'/js/modules/box/audio.mp3',
                 oggSrc:''
             });
             audio.render(Y.one('#content'));
-            sensor.bindBoxes();
             audio.setState('move');
-            boxes.push(audio);
         });
 
         Y.one('#edit').on('click',function(){
@@ -140,13 +134,9 @@ YUI({
             // Use the contents of the button to determine state
             Y.log('buttonContent is '+buttonContent, 'debug');
             if(buttonContent == 'Done'){
-                boxes.forEach(function(item){
-                    item.destroyDD();
-                });
+                sensor.broadcastState('done');
             }else{
-                boxes.forEach(function(item){
-                    item.initializeDD(); 
-                });
+                sensor.broadcastState('move');
             }
         });
   

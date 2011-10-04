@@ -25,6 +25,7 @@ Box = Y.Base.create("box", Y.Widget, [], {
         Y.log('destructing', 'debug');
     },
     
+    // this is overwritten by other classes
     renderUI: function() {
         Y.log('renderUI', 'debug');
         
@@ -49,6 +50,7 @@ Box = Y.Base.create("box", Y.Widget, [], {
       
     },
     
+    // this is common among all classes
     bindUI: function(){
     
         // Add the event handlers
@@ -59,10 +61,20 @@ Box = Y.Base.create("box", Y.Widget, [], {
         // helper function for rBox
         that.bindRBox();
 
-        // When click, set state to static
+        // When clicked, set state to static
         that.get('bBox').get('parentNode').on('click', function(e){
-            that.setState('static');
+            Y.log('bindUI: parent node clicked');
+            if(that.get('state') !== 'done'){
+                // block this listener if state is done
+                that.setState('static');
+            }
         });
+        
+        // listen to the setState for updates
+        Y.after('sensor:setState',function(e){
+            Y.log('heard sensor set me to '+e.state,'debug');
+            that.setState(e.state);
+        },that);
        
         
     },
@@ -86,6 +98,11 @@ Box = Y.Base.create("box", Y.Widget, [], {
         Y.log('setting state to '+state);
         this.set('state',state);
         switch(state){
+            case 'done':
+                this.destroyDD();
+                this.get('rBox').setAttribute('contentEditable', 'false');
+                this.get('rBox').setStyle('opacity',this.get('opacity'));
+            break;
             case 'static':
                 //this.destroyDD();
                 this.hideDD();
@@ -194,19 +211,16 @@ Box = Y.Base.create("box", Y.Widget, [], {
         });
         
         Y.one(that.get('rBox')).on('click', function(e){
-            Y.log('rBox click', 'debug');
-            
-            switch(that.get('state')){
-                case  'static':
-                    that.setState('move');
-                    break;
-            }
+            // to prevent parent from hearing the click
+            // because the parent causes state to change to static
             e.stopPropagation();
         });
        
         that.get('rBox').on('dblclick', function(e){
             Y.log('rBox dblclick', 'debug');
-            that.setState('edit');
+            if(that.get('state')!=='done'){
+                that.setState('edit');
+            }
             e.stopPropagation();
         });
         
