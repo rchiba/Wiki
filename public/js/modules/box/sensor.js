@@ -46,34 +46,40 @@ Sensor = Y.Base.create('sensor', Y.Base, [], {
         
         // listen to the setState for updates
         this.sub = Y.after('box:setState',function(e){
-            Y.log('sensor has heard a state change to '+e.state+e.node);
-            
-            // set the old node to static
-            if(that.get('nodesSelected')){
-                that.get('nodesSelected').setState('static');
-            }
-            
-            // set new as the one selected 
-            Y.log('setting nodesSelected');
-            that.set('nodesSelected', e.node);
-            Y.log(that);
+            that.handleSetState(e);
         },this);
         
         // listen to the setState for updates
         this.sub = Y.after('picBox:setState',function(e){
-            Y.log('sensor has heard a state change to '+e.state+e.node);
-            
-            // set the old node to static
-            if(that.get('nodesSelected')){
-                that.get('nodesSelected').setState('static');
-            }
-            
-            // set new as the one selected 
-            Y.log('setting nodesSelected');
-            that.set('nodesSelected', e.node);
-            Y.log(that);
+            that.handleSetState(e);
         },this);
         
+        // listen to the setState for updates
+        this.sub = Y.after('audioBox:setState',function(e){
+            that.handleSetState(e);
+        },this);
+        
+        // listen to the setState for updates
+        this.sub = Y.after('videoBox:setState',function(e){
+            that.handleSetState(e);
+        },this);
+        
+    },
+    
+    // handling of things having their state changing
+    handleSetState: function(e){
+        var that = this;
+        Y.log('sensor has heard a state change to '+e.state+e.node);
+            
+        // set the old node to static
+        if(that.get('nodesSelected')){
+            that.get('nodesSelected').setState('static');
+        }
+        
+        // set new as the one selected 
+        Y.log('setting nodesSelected');
+        that.set('nodesSelected', e.node);
+        Y.log(that);
     },
     
     // define key events
