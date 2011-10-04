@@ -33,11 +33,8 @@ Box = Y.Base.create("box", Y.Widget, [], {
         var cBox = this.get('contentBox');
         var rBox = Y.Node.create('<div>');
         
-        rBox.setStyle('width', '80px');
-        rBox.setStyle('height', '80px');
-        rBox.setStyle('position', 'absolute');
         rBox.setAttribute('contentEditable', 'true');
-        
+        rBox.addClass('boxRbox');
         if(this.get('defaultClass')){
             rBox.addClass(this.get('defaultClass'));
         }

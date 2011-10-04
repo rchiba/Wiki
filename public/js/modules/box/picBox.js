@@ -17,12 +17,8 @@ PicBox = Y.Base.create("picBox", Y.pixel.Box, [], {
         var rBox = Y.Node.create('<div>');
         var img = Y.Node.create('<img>');
         img.setAttribute('src',this.get('pic'));
-        img.addClass('resizeImg');
-        img.setStyle('width','100%');
-        rBox.setStyle('position', 'absolute');
-        rBox.setStyle('backgroundColor','#fff');
-        rBox.setStyle('padding','10px');
-        
+        img.addClass('resizePic');
+        rBox.addClass('picRbox'); 
         cBox.insert(rBox);
         rBox.insert(img);
         this.set('rBox', rBox);

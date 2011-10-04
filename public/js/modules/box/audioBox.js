@@ -29,11 +29,8 @@ AudioBox = Y.Base.create("audioBox", Y.pixel.Box, [], {
         audio.insert(mp3Source);
         audio.insert(oggSource);
 
-        rBox.setStyle('position', 'absolute');
-        rBox.setStyle('backgroundColor','#fff');
-        rBox.setStyle('padding','10px');
-        
         cBox.insert(rBox);
+        rBox.addClass('audioRbox');
         rBox.insert(audio);
         this.set('rBox', rBox);
         this.set('bBox', bBox);
@@ -46,6 +43,11 @@ AudioBox = Y.Base.create("audioBox", Y.pixel.Box, [], {
         Y.log('setting state to '+state);
         this.set('state',state);
         switch(state){
+            case 'done':
+                this.destroyDD();
+                this.get('rBox').setAttribute('contentEditable', 'false');
+                this.get('rBox').setStyle('opacity',this.get('opacity'));
+            break;
             case 'static':
                 //this.destroyDD();
                 this.hideDD();

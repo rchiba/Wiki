@@ -47,10 +47,6 @@ $(document).ready(function() {
   // This function is to turn on edit mode
   function activateEditMode(){
      
-    // add grid class, and other changes
-    $('#page').addClass('grid');
-    $('#edit').text('Done');
-
     // render toolbar
     renderToolbar(true);
 
@@ -61,10 +57,6 @@ $(document).ready(function() {
   // This function is to turn off edit mode
   function deactivateEditMode(){
 
-    // remove grid class
-    $('#page').removeClass('grid');
-    $('#edit').text('Edit');
-    
     // derender toolbar
     renderToolbar(false);
 
@@ -93,7 +85,7 @@ $(document).ready(function() {
 YUI({
     debug:true,
     useBrowserConsole: true,
-    }).use('node', 'box', 'picbox', 'audiobox', 'sensor', 'event-synthetic', function (Y) {
+    }).use('node', 'box', 'picbox', 'audiobox', 'videobox', 'sensor', 'event-synthetic', function (Y) {
 
     Y.on('domready', function(){
     
@@ -110,15 +102,17 @@ YUI({
             box.setState('move');
         });
         
+        var picCounter = 0;
         Y.one('#addPhoto').on('click',function(){
             var pic = new Y.pixel.PicBox({
                 parentNode:'#content',
-                pic:'/js/modules/box/shadow.JPG'
+                pic:'/images/Capture'+picCounter%15+'.JPG'
             });
             pic.render(Y.one('#content'));
             pic.setState('move');
+            picCounter++;
         });
-
+        
         Y.one('#addAudio').on('click',function(){
             var audio = new Y.pixel.AudioBox({
                 parentNode:'#content',
@@ -129,15 +123,36 @@ YUI({
             audio.setState('move');
         });
 
+
+        Y.one('#addVideo').on('click',function(){
+            var video = new Y.pixel.VideoBox({
+                parentNode:'#content',
+                videoLink:'http://youtu.be/QH2-TGUlwu4',
+            });
+            video.render(Y.one('#content'));
+            video.setState('move');
+        });
+
+       
+        // Edit button toggling 
+        var editModeOn = false;
         Y.one('#edit').on('click',function(){
-            var buttonContent = Y.one('#edit').get('text');
-            // Use the contents of the button to determine state
-            Y.log('buttonContent is '+buttonContent, 'debug');
-            if(buttonContent == 'Done'){
+            if(editModeOn){
+                // turn off edit mode
+                Y.log('turning off edit mode', 'debug');
+                editModeOn = false;
                 sensor.broadcastState('done');
+                Y.one('#page').removeClass('grid'); 
+                Y.one('#edit').set('text', 'Edit');
             }else{
+                // turn on edit mode
+                Y.log('turning on edit mode', 'debug');
+                editModeOn = true;
                 sensor.broadcastState('move');
+                Y.one('#page').addClass('grid');
+                Y.one('#edit').set('text', 'Done');
             }
+
         });
   
     }); // end domready
