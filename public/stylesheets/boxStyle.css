@@ -39,12 +39,9 @@
 
 .resizePic{
     border: 0px;
-    width: 100%;
 }
 
 .picRbox{
-    height: 315px;
-    width: 420px;
     position: absolute;
     background-color: #86C9EF;
     padding: 10px;

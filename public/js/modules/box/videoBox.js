@@ -19,6 +19,7 @@ VideoBox = Y.Base.create("videoBox", Y.pixel.Box, [], {
         vid.setAttribute('src',this.parseVideoLink(this.get('videoLink')));
         vid.addClass('resizeVideo');
         rBox.addClass('videoRbox');
+        rBox.setStyle('top',document.body.scrollTop); 
         
         cBox.insert(rBox);
         rBox.insert(vid);

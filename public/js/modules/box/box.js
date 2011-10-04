@@ -35,6 +35,7 @@ Box = Y.Base.create("box", Y.Widget, [], {
         
         rBox.setAttribute('contentEditable', 'true');
         rBox.addClass('boxRbox');
+        rBox.setStyle('top',document.body.scrollTop); 
         if(this.get('defaultClass')){
             rBox.addClass(this.get('defaultClass'));
         }

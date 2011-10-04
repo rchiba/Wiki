@@ -18,9 +18,15 @@ PicBox = Y.Base.create("picBox", Y.pixel.Box, [], {
         var img = Y.Node.create('<img>');
         img.setAttribute('src',this.get('pic'));
         img.addClass('resizePic');
+        img.setStyle('width','100%');
         rBox.addClass('picRbox'); 
         cBox.insert(rBox);
         rBox.insert(img);
+        rBox.setStyle('top',document.body.scrollTop); 
+        Y.on('contentready', function(){
+            // trying to do post-load processing
+            // not working
+        }, '.resizePic');
         this.set('rBox', rBox);
         this.set('bBox', bBox);
         

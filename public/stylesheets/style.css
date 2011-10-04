@@ -145,12 +145,12 @@ Toolbar stuff
 #page {
   margin-top: 50px;
   width: 1024px;
-  height: 1000px;
+  height: 2000px;
   background-color: #fff;
 }
 #content {
   width: 1024px;
-  height: 800px;
+  height: 2000px;
   position: relative;
 }
 /*

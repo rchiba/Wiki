@@ -106,7 +106,7 @@ YUI({
         Y.one('#addPhoto').on('click',function(){
             var pic = new Y.pixel.PicBox({
                 parentNode:'#content',
-                pic:'/images/Capture'+picCounter%15+'.JPG'
+                pic:'/images/Capture'+picCounter%15+'.PNG'
             });
             pic.render(Y.one('#content'));
             pic.setState('move');

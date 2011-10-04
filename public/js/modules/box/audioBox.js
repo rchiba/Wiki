@@ -15,6 +15,7 @@ AudioBox = Y.Base.create("audioBox", Y.pixel.Box, [], {
         var bBox = this.get('boundingBox');
         var cBox = this.get('contentBox');
         var rBox = Y.Node.create('<div>');
+        rBox.setStyle('top',document.body.scrollTop); 
         // including two audio sources for max compatibility
         var audio = Y.Node.create('<audio>');
         var mp3Source = Y.Node.create('<source>');
