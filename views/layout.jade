@@ -20,4 +20,12 @@ html
     script(type='text/javascript', src='/js/main.js')
     
   body
-    include index 
+    #main
+      #header
+        - if (session.user)
+          #user= 'logged in as ' + session.user.login
+          #logout
+            a(href='/sessions/destroy') logout
+      - if (flash.warn)
+        p#warn= flash.warn
+      #container!= body
