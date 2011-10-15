@@ -11,7 +11,7 @@ module.exports =  {
         if(!pass){
             return "Please enter a password.";
         } else if(pass.length < 5 ){
-            return "Password must be at least 5 characters";
+            return "Password must be at least 5 characters.";
         } else {
 
             // return a funny message for common passwords

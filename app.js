@@ -16,8 +16,8 @@ var MemStore = connect.session.MemoryStore;
 
 var passwordHash = require('password-hash');
 
-// My modules
-var validate = require('./myModules/validate');
+// My Controllers 
+var regController = require('./myModules/register');
 
 // Configuration
 
@@ -61,9 +61,12 @@ app.dynamicHelpers({
             return null;
         }
     }});
+
 // Models
-require('./users');
+require('./models/users');
+require('./models/pages');
 var User = db.model('User');
+var Page = db.model('Page');
 
 // Session middleware
 function requiresLogin(req, res, next){
@@ -105,68 +108,17 @@ app.post('/sessions', function(req, res){
 
 // Create a new user
 app.post('/register', function(req, res){
-    var data = req.body;
-    // Search database for user
-    User.findOne({username:data.username}, function(err, doc){
-        console.log('findOne returned with '+err+doc);
-        var err = '';
-        var passErr = validate.password(data.password);
-        console.log('passerr: '+typeof passErr);
-        if(doc){
-            req.flash('warn', 'Username is in use');
-            res.render('login',{
+    console.log('register route hit');
+    regController.handle(req, User, function(type, msg){
+        console.log('in regController callback');
+        req.flash(type, msg);   
+        res.render('login',{
             title:'Login',    
             locals:{
                 redir: req.query.redir
             }
-            });
-        } else if(data.password != data.confirm_password){
-            req.flash('warn', 'Password does not match');
-            res.render('login',{
-            title:'Login',    
-            locals:{
-                redir: req.query.redir
-            }
-            });
-        } else if(typeof passErr == 'string'){
-            req.flash('warn', passErr);
-            res.render('login',{
-            title:'Login',    
-            locals:{
-                redir: req.query.redir
-            }
-            });
-        } else {
-            delete data.confirm_password;
-            // store user data
-            var newUser = new User();
-            newUser.username = data.username;
-            newUser.password = passwordHash.generate(data.password);
-            newUser.role = 'user';
-            newUser.save(function(err){
-                console.log('done saving user');
-                if(!err){
-                    req.flash('warn', 'User created');
-                    res.render('login',{
-                    title:'Login',    
-                    locals:{
-                        redir: req.query.redir
-                    }
-                    });
-                } else {
-                    req.flash('warn', err);
-                    res.render('login',{
-                    title:'Login',    
-                    locals:{
-                        redir: req.query.redir
-                    }
-                    });
-                }
-            });       
-        }
-
-    });
-
+        });
+    })
 });
     
 
@@ -177,19 +129,13 @@ app.get('/sessions/destroy', function(req, res) {
 
 app.get('/', requiresLogin, function(req, res){
   res.render('index', {
-    title: 'Wikibox'
+    title: 'Pixlwiki'
   });
-});
-
-app.get('/test', function(req, res){
-    articleProvider.findAll(function(error, docs){
-        res.send(docs);
-    });
 });
 
 app.get('/about', function(req, res){
   res.render('about', {
-    title: 'About Wikibox'
+    title: 'About Pixlwiki'
   });
 });
 
