@@ -4,20 +4,16 @@
  */
 
 var express = require('express');
-
 var Mongoose = require('mongoose');
-
 var db = Mongoose.connect('mongodb://localhost/db');
-
 var app = module.exports = express.createServer();
-
 var connect = require('connect');
 var MemStore = connect.session.MemoryStore;
-
 var passwordHash = require('password-hash');
 
-// My Controllers 
+// My Controllers/Modules
 var regController = require('./myModules/register');
+var pageController = require('./myModules/page');
 
 // Configuration
 
@@ -127,13 +123,34 @@ app.get('/sessions/destroy', function(req, res) {
     res.redirect('/sessions/new');
 });
 
+
+app.get('/:username/:page?', requiresLogin, function(req, res){
+    var username = req.params.username;
+    var page = req.params.username;
+
+    // no page goes to index
+    if(!page){
+        page = 'index';
+    }
+
+    // use pageController to load mongo data
+    pageController.get(Page, username, page, function(err, elements){
+        // page module
+        res.render('page', {
+            title: username+'\'s Pixlwiki - '+page,
+            elements: elements
+        });
+    });
+  
+});
+
 app.get('/', requiresLogin, function(req, res){
   res.render('index', {
     title: 'Pixlwiki'
   });
 });
 
-app.get('/about', function(req, res){
+app.get('/pixlwiki/about', function(req, res){
   res.render('about', {
     title: 'About Pixlwiki'
   });

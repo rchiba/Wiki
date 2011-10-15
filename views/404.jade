@@ -1,0 +1,28 @@
+#container
+  #logo pixlwiki 
+  #topbar 
+    .textMargin(style="float:left;")
+      a(href="") about
+      a(href="", style="margin-left:10px") tour
+    #loginButton.highlightGrad
+      .textMargin 
+        |  login
+  
+  //      
+      #loginOverlay(title="Login") 
+        p
+          form#loginForm(action="", method="post")
+        |  email: 
+        input(type="text", name="email")
+        br
+        |  password: 
+        input(type="text", name="password")
+        br
+        input(id="loginSubmitButton", type="submit", value="login")
+  
+  #page
+    #toolbar
+    #content
+      #404(style="margin-right:auto; margin-left:auto; width:400px; font-size: 100px;") 404
+      #sorry(style="margin-right:auto;margin-left:auto;width:300px; font-size:11px;") 
+        Sorry, we weren't able to find this page. :( But here are some links that you might find interesting: blah blah blah
