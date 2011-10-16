@@ -11,34 +11,39 @@ contains all the pieces of a page needed to render it
 */
 
 var Mongoose = require("mongoose"), Schema = Mongoose.Schema;
-var passwordHash = require('password-hash');
 
-function usernameValidator (v){
-    return v.length > 0;
-};
+var User = require('../models/users');
 
-var Page = new Schema({
-    name: {type: String, index:true, validate: [usernameValidator, 'username must be at least 1 character long']},
-    date: {type: String, index:true},
-    privacy: {type: String},
-    owner: {type: String},
-    pieces: {type: String}
-});
-
-Page.static({
-    authenticate : function(username,password,callback){
-        this.findOne({username:username},function(err,doc){
-            console.log('findOne returned with '+err+doc);
-            if(err || !doc){
-                callback(false);
-            } else if(passwordHash.verify(password, doc.password)){
-                callback(doc);
-            }
-            else{ // password mismatch
-                callback(false);
-            }
-        })
+// function to validate the title of the page
+function titleValidator(v){
+    if(!v || v.length > 100){
+        return false;
+    }else{
+        return true;
     }
+}
+
+// Element: a single editable div on the page
+var Element = new Schema({
+    pageName: {type: String},
+    html: {type: String}
 });
 
+// Page: a single page
+var Page = new Schema({
+    title: {type: String, index:true, validate: [titleValidator, 'Please enter a valid title.']},
+    date: {type: Date, index:true},
+    lastChanged: {type: Date, index:true},
+    privacy: {type: String, enum:['private', 'protected', 'public']},
+    owner: {type: String}, 
+    allowed:[User], // Users allowed to view this page 
+    elements: [Element]
+});
+
+Page.pre( 'save', function(next, done){
+    this.lastChanged = new Date();
+    next();
+});
+
+Mongoose.model('Element',Element);
 Mongoose.model('Page',Page);

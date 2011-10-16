@@ -60,9 +60,7 @@ app.dynamicHelpers({
 
 // Models
 require('./models/users');
-require('./models/pages');
 var User = db.model('User');
-var Page = db.model('Page');
 
 // Session middleware
 function requiresLogin(req, res, next){
@@ -125,8 +123,6 @@ app.get('/sessions/destroy', function(req, res) {
 
 
 app.get('/:username/:page?', requiresLogin, function(req, res){
-    var username = req.params.username;
-    var page = req.params.username;
 
     // no page goes to index
     if(!page){
@@ -134,7 +130,7 @@ app.get('/:username/:page?', requiresLogin, function(req, res){
     }
 
     // use pageController to load mongo data
-    pageController.get(Page, username, page, function(err, elements){
+    pageController.get(db, req, function(err, elements){
         // page module
         res.render('page', {
             title: username+'\'s Pixlwiki - '+page,

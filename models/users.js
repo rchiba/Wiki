@@ -11,9 +11,9 @@ function usernameValidator (v){
 };
 
 var User = new Schema({
-    username : {type: String, index:true, validate: [usernameValidator, 'username must be at least 1 character long']},
+    username : {type: String, index:true, validate: [usernameValidator, 'username must be at least 1 character long'], trim: true},
     password : {type: String, index:true},
-    role : {type: String}
+    role : {type: String, enum:['user', 'admin']}
 });
 
 User.static({
@@ -33,3 +33,6 @@ User.static({
 });
 
 Mongoose.model('User',User);
+
+// so other models can use this model in their ODM
+module.exports = User;
