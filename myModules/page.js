@@ -43,22 +43,46 @@ module.exports =  {
     },
 
     // takes in data and saves to mongo
-    update: function(){
+    update: function(db, req, callback){
     
-        // do some parsing
-
-        // save into mongo
-    
+        if(!db || !req || !req.body || !(typeof req.body.elements == 'string')){
+            callback('Update called with wrong params.');
+        } else{
+            var page = req.params.page;
+            var username = req.params.username;
+            var loginUsername = req.session.user.username;
+            if(loginUsername !== username){
+                // authentication check
+                callback('User not authorized to change this page.', null);
+            } else {
+                // user is allowed to update page
+                console.log('pageController: user allowed to update page');
+                if(!Page){
+                    Page = db.model('Page');
+                }
+                
+                // do some parsing
+                var elementsString = req.body.elements;
+                console.log('pageController: just before parse with '+elementsString);
+                var myElements = JSON.parse(elementsString);
+                console.log('pageController: just after parse');
+                // save into mongo
+                Page.update({title:page, owner:username}, {elements:myElements}, function(err){
+                    if(err){
+                        callback(err, null);
+                    } else {
+                        callback(null, 'Successfully updated page');
+                    }
+                });
+            }            
+        }
     },
 
     // retrieves data from mongo
     get: function(db, req, callback){
        
        console.log('pageController: get called');
-       var page = req.params.page;
-       var username = req.params.username;
-       var loginUsername = req.session.user.login;
-
+       
        // error checker
        if(!db || !req){
            callback('Invalid params for pageController.get', null);
@@ -67,13 +91,20 @@ module.exports =  {
            if(!Page){
                Page = db.model('Page');
            }
+           
+           var page = req.params.page;
+           var username = req.params.username;
+           var loginUsername = req.session.user.username;
 
            if(loginUsername !== username){
                // User is checking another user's page
                 console.log('pageController: user checking another users page'); 
                 Page.findOne({owner:username, title:page}, function(err, doc){
                     console.log('pageController: findOne returned with '+err+doc);
-                    if(err){
+                    if(!err && !doc){
+                        callback('Page does not exist.', null);
+                    }
+                    else if(err){
                         callback(err, null);
                     } else{
                         // successfully pulled page
@@ -99,8 +130,13 @@ module.exports =  {
                 });
            }else{
                // user is checking own page
-                Page.findOne({owner:username, title:page}, function(err, doc){
-                    if(err){
+               console.log('pageController: user checking own page with '+username+page); 
+               Page.findOne({owner:username, title:page}, function(err, doc){
+                   console.log('pageController: findOne returned with '+err+doc);
+                    if(!err && !doc){
+                        callback('Page does not exist', null);
+                    }
+                    else if(err){
                         callback(err, null);
                     } else{
                         callback(null, doc);

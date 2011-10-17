@@ -31,8 +31,14 @@ module.exports =  {
                 newUser.password = passwordHash.generate(data.password);
                 newUser.role = 'user';
                 newUser.save(function(err){
-                    console.log('done saving user');
+                    console.log('done saving user '+err);
                     if(!err){
+                        // add user to session
+                        console.log('1');
+                        if(req.session){
+                            req.session.user = newUser;
+                        }
+                        console.log('2');
                         callback('info', 'User created');
                     } else {
                         callback('warn', err);

@@ -185,7 +185,7 @@ module.exports =  {
                     page:'test5Page',
                     username: 'test5'
                 },
-                session:{user:{login:'test5'}}
+                session:{user:{username:'test5'}}
             }
             pageController.get(db, req, function(err, doc){
                 //console.log('testValidGetPublic:  '+err+doc);
@@ -229,7 +229,7 @@ module.exports =  {
                     page:'test6Page',
                     username: 'test6'
                 },
-                session:{user:{login:'anotherUser'}}
+                session:{user:{username:'anotherUser'}}
             }
             pageController.get(db, req, function(err, doc){
                //console.log('testValidGetPublicNonOwnerPage:  '+err+doc);
@@ -273,7 +273,7 @@ module.exports =  {
                     page:'test7Page',
                     username: 'test7'
                 },
-                session:{user:{login:'test7'}}
+                session:{user:{username:'test7'}}
             }
             pageController.get(db, req, function(err, doc){
                 //console.log('testValidGetPrivate:  '+err+doc);
@@ -309,7 +309,7 @@ module.exports =  {
         }
 
         pageController.create(db, cfg8, function(err, msg){
-            console.log('testValidGetPrivateNonOwnerPage: '+err+msg);
+            //console.log('testValidGetPrivateNonOwnerPage: '+err+msg);
             // then try to get the page
             // request should have these things in it
             req = {
@@ -317,14 +317,67 @@ module.exports =  {
                     page:'test8Page',
                     username: 'test8'
                 },
-                session:{user:{login:'anotherUser'}}
+                session:{user:{username:'anotherUser'}}
             }
             pageController.get(db, req, function(err, doc){
-                console.log('testValidGetPrivateNonOwnerPage:  '+err+doc);
+                //console.log('testValidGetPrivateNonOwnerPage:  '+err+doc);
                 assert.isNull(doc);
                 assert.eql(err, 'This page is private.');
                 Page.remove({owner:'test8', title:'test8Page'}, function(){
                     counter++;
+                });
+            });
+        });
+
+        beforeExit(function(){
+            // make sure all tests have executed here
+            assert.eql(counter, 1);   
+        });
+
+    },
+ 
+    // Test valid update of own page
+    'testValidUpdatePage': function(beforeExit, assert){
+        
+        var counter = 0; 
+        var user = 'test9';
+        // first, create the page to be tested
+        
+        var cfg9 = {
+            title: user+'Page',
+            privacy: 'private',
+            owner: user,
+            allowed: [],
+            elements: []
+        }
+
+        pageController.create(db, cfg9, function(err, msg){
+            console.log('testValidUpdatePage1: '+err+msg);
+            // then try to get the page
+            // request should have these things in it
+            req = {
+                params:{
+                    page:user+'Page',
+                    username: user
+                },
+                session:{user:{username:user}},
+                // takes in an html array of elements
+                body:{
+                    "elements":"[\"<div>element1</div>\", \"<div>element2</div>\"]"
+                }
+            }
+            pageController.update(db, req, function(err){
+                console.log('testValidUpdatePage2:  '+err);
+                
+                // now, read from mongo to verify update
+                Page.findOne({owner:user, title:user+'Page'},function(err, doc){
+                    // verify mongo entry
+                    console.log('testValidUpdatePage3: '+err+doc);
+                    console.log('testValidUpdatePage4: '+JSON.stringify(doc.elements[0]));
+                    assert.isNull(err);
+                    Page.remove({owner:user, title:user+'Page'}, function(){
+                        counter++;
+                    });
                 });
             });
         });

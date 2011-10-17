@@ -23,7 +23,7 @@ html
     #main
       #header
         - if (session.user)
-          #user= 'logged in as ' + session.user.login
+          #user= 'logged in as ' + session.user.username
           #logout
             a(href='/sessions/destroy') logout
       - if (flash.warn)

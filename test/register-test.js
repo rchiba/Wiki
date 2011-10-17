@@ -83,25 +83,31 @@ module.exports =  {
     },
     
     'testValid': function(beforeExit, assert){
+        var counter = 0;
         var req = {
             body:{
                 username: 'test',
                 password: '1234567',
                 confirm_password:'1234567'
-            }
+            },
+            session:{}// this will be set to new user
         }
-        
+        console.log('testValid about to start');
         regController.handle(req, User, function(type, msg){
             assert.isNotNull(type);
             assert.isNotNull(msg);
+            assert.isNotNull(req.session.user); // controller sets session for new user
             assert.eql(type, 'info');
             assert.eql(msg, 'User created');
-
             // Tear down
-            User.findOne({username: 'test'}, function(err, doc){
-                doc.remove();
+            User.remove({username: 'test'}, function(){
+                counter++;
             });
 
+        });
+
+        beforeExit(function(){
+            assert.eql(counter, 1);
         });
     }
 
